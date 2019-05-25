@@ -29,4 +29,4 @@ api.add_resource(Multi,'/multi/<int:num>')
 api.add_resource(Codigo,'/codigo/<string:correo>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='localhost', port=5000)
