@@ -14,19 +14,25 @@ class HelloWorld(Resource):
         some_json = request.get_json()
         return {'you sent': some_json}
 
-class Codigo(Resource):
-    def get(self,correo):
-        return {'codigo':codigo.generarCodigo(correo)}
+#class Codigo(Resource):
+  #  def get(self,correo):
+  #      return {'codigo':codigo.generarCodigo(correo)}
         #return {'you sent': num}
 
 class Multi(Resource):
     def get(self,num):
         return {'result': num*10}
 
+class Codigo(Resource):
+    def post(self):
+        data = request.json
+        return {'codigo':codigo.generarCodigo(data['correo'])}
+
+
 api.add_resource(HelloWorld,'/')
 api.add_resource(Multi,'/multi/<int:num>')
 
-api.add_resource(Codigo,'/codigo/<string:correo>')
+api.add_resource(Codigo,'/codigo')
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
