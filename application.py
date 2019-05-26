@@ -1,10 +1,12 @@
-import codigo
+import dataBase
 
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
 api = Api(app)
+
+parser = reqparse.RequestParser()
 
 class HelloWorld(Resource):
     def get(self):
@@ -14,25 +16,34 @@ class HelloWorld(Resource):
         some_json = request.get_json()
         return {'you sent': some_json}
 
-#class Codigo(Resource):
-  #  def get(self,correo):
-  #      return {'codigo':codigo.generarCodigo(correo)}
-        #return {'you sent': num}
-
 class Multi(Resource):
     def get(self,num):
         return {'result': num*10}
 
+#class Codigo(Resource):
+#   def post(self):
+#       data = request.json
+#        return {'codigo':dataBase.generarCodigo(data['correo'])},201
+    
 class Codigo(Resource):
     def post(self):
-        data = request.json
-        return {'codigo':codigo.generarCodigo(data['correo'])}
+            parser.add_argument('correo', type=str)
+            args = parser.parse_args()
+            return { 'codigo':dataBase.generarCodigo(args['correo']) }
+
+class Registro(Resource):
+    def post(self):
+        parser.add_argument('correo',type=str)  
+        args = parser.parse_args()
+        return {'mensaje':dataBase.nuevoregistro(args['correo'])}          
 
 
 api.add_resource(HelloWorld,'/')
 api.add_resource(Multi,'/multi/<int:num>')
 
 api.add_resource(Codigo,'/codigo')
+api.add_resource(Registro,'/registro')
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
+    #app.run(debug=True, host='10.0.0.4', port=8080)
