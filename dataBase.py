@@ -13,10 +13,14 @@ def generarCodigo(correo):
     cursor.execute(
         "SELECT codigo FROM usuario where correo = '" + correo + "'"
     )
+    results = cursor.fetchall()
 
-    respuesta = cursor.fetchone()
+    for row in results:
+        respuesta = row[0]
+    
+    print(respuesta)
     if respuesta != None:
-        respuesta = respuesta
+        respuesta = str(respuesta)
     else:
         respuesta = "No existe el correo solicitado"
 
