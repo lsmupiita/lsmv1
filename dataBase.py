@@ -4,6 +4,7 @@ import operaciones
 
 
 def generarCodigo(correo):
+    respuesta=""
     conn = pymysql.connect(
         host="104.198.31.228", port=3306, user="lsmupiita",
         passwd="lsmupiita", db="lsmupiita"
@@ -14,13 +15,12 @@ def generarCodigo(correo):
         "SELECT codigo FROM usuario where correo = '" + correo + "'"
     )
     results = cursor.fetchall()
-
     for row in results:
         respuesta = row[0]
     
-    print(respuesta)
-    if respuesta != None:
-        respuesta = str(respuesta)
+    print(len(respuesta))
+    if len(respuesta)!=0:
+        respuesta = respuesta
     else:
         respuesta = "No existe el correo solicitado"
 
