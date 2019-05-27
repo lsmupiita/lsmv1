@@ -15,21 +15,18 @@ class HelloWorld(Resource):
     def post(self):
         some_json = request.get_json()
         return {'you sent': some_json}
-
-class Multi(Resource):
-    def get(self,num):
-        return {'result': num*10}
-
-#class Codigo(Resource):
-#   def post(self):
-#       data = request.json
-#        return {'codigo':dataBase.generarCodigo(data['correo'])},201
     
 class Codigo(Resource):
     def post(self):
             parser.add_argument('correo', type=str)
             args = parser.parse_args()
             return { 'codigo':dataBase.generarCodigo(args['correo']) }
+
+class EntrarClase(Resource):
+    def post(self):
+            parser.add_argument('codigo', type=str)
+            args = parser.parse_args()
+            return { 'mensaje':dataBase.comprobarExistencia(args['codigo']) }
 
 class Registro(Resource):
     def post(self):
@@ -39,11 +36,11 @@ class Registro(Resource):
 
 
 api.add_resource(HelloWorld,'/')
-api.add_resource(Multi,'/multi/<int:num>')
 
 api.add_resource(Codigo,'/codigo')
 api.add_resource(Registro,'/registro')
+api.add_resource(EntrarClase,'/entrarClase')
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
-    #app.run(debug=True, host='10.0.0.4', port=8080)
+    #app.run(debug=True, host='10.0.0.4', port=5000)
