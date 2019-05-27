@@ -14,11 +14,10 @@ class Traduccion(Resource):
     
     def get(self):
         return {
+            'token': token,
             'sujeto': 'perro',
             'verbo': 'juega',
-            'predicado': 'pelota',
-            'token': token
-        
+            'predicado': 'pelota'
         }
 
     def post(self):
