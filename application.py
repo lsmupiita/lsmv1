@@ -7,14 +7,31 @@ app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
+oraciontraducida="Sin oracion"
+token="00000000"
 
-class HelloWorld(Resource):
+class Traduccion(Resource):
+    
     def get(self):
-        return {'about':'Hola mundo'}
+        return {
+            'sujeto': 'perro',
+            'verbo': 'juega',
+            'predicado': 'pelota',
+            'token': token
+        
+        }
 
     def post(self):
-        some_json = request.get_json()
-        return {'you sent': some_json}
+        parser.add_argument('codigo', type=str)
+        parser.add_argument('oracion', type=str)
+        args = parser.parse_args()
+        global oracionTraducida
+        oracionTraducida=args['oracion']
+        global token
+        token=args['codigo']
+        return {
+            'estado':'envio exitoso'
+        }
     
 class Codigo(Resource):
     def post(self):
@@ -35,7 +52,7 @@ class Registro(Resource):
         return {'mensaje':dataBase.nuevoregistro(args['correo'])}          
 
 
-api.add_resource(HelloWorld,'/')
+api.add_resource(Traduccion,'/')
 
 api.add_resource(Codigo,'/codigo')
 api.add_resource(Registro,'/registro')

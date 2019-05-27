@@ -16,11 +16,11 @@ def abrirConexion():
 ##############################################################
 
 def comprobarExistencia(codigo):
-    print(codigo)
     respuesta=""
     cnx =abrirConexion()
     cursor = cnx.cursor()
-    cursor.execute("SELECT correo FROM usuario where codigo = '" + codigo + "'")
+    query=("select correo from usuario where codigo = %s")
+    cursor.execute(query,(codigo,))
     results = cursor.fetchall()
     for row in results:
         respuesta = row[0]
@@ -38,12 +38,12 @@ def generarCodigo(correo):
     cnx =abrirConexion()
 
     cursor = cnx.cursor()
-    cursor.execute("SELECT codigo FROM usuario where correo = '" + correo + "'")
+    query=("select codigo from usuario where correo = %s")
+    cursor.execute(query,correo)
     results = cursor.fetchall()
     for row in results:
         respuesta = row[0]
-    
-    print(len(respuesta))
+        
     if len(respuesta)!=0:
         respuesta = respuesta
     else:
@@ -55,22 +55,18 @@ def generarCodigo(correo):
 
 
 def nuevoregistro(correo):
-    cnx =abrirConexion()
-
-    cursor = cnx.cursor()
-    cursor.execute("SELECT codigo FROM usuario where correo = '" + correo + "'")
-
-    respuesta = cursor.fetchone()
-    print(respuesta)
-    if respuesta == None:
-        cursor.execute("insert into usuario values ('" + correo + "','" + operaciones.crearCodigo(correo) + "')")
+    respuesta=""
+    if len(generarCodigo(correo))!=8:
+        cnx =abrirConexion()
+        cursor = cnx.cursor()
+        query=("insert into usuario values(%s,%s)")
+        cursor.execute(query,(correo, operaciones.crearCodigo(correo)))
         respuesta = "Registro exitoso"
+        cursor.close()
+        cnx.commit()
+        cnx.close()
     else:
         respuesta = "El correo ya existe"
-
-    cursor.close()
-    cnx.commit()
-    cnx.close()
 
     return respuesta
 
